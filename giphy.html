@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giphy</title>
+  </head>
+  <body>
+    <div class="buttons"></div>
+
+    <div id="gifs-appear-here"></div>
+
+    <form>
+      <input id="input" />
+      <button id="new-emotion">Add new emotion</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var buttonNames = [
+        "excited",
+        "confused",
+        "tired",
+        "bored",
+        "happy",
+        "hungry",
+        "angry",
+        "satisfied",
+        "lost"
+      ];
+
+      for (var i = 0; i < buttonNames.length; i++) {
+        var makeButton = $("<button>");
+        makeButton.text(buttonNames[i]);
+        makeButton.attr("data-emotion", buttonNames[i]);
+        $(".buttons").append(makeButton);
+      }
+
+      $(".buttons").on("click", "button", function() {
+        $("#gifs-appear-here").empty();
+        var emotion = $(this).attr("data-emotion");
+        console.log(this);
+        var queryURL =
+          "https://api.giphy.com/v1/gifs/search?q=" +
+          emotion +
+          "&api_key=onwqKCPqpfAm7zPOSjvEVrb1AGEDfl9M";
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+          var results = response.data;
+
+          for (var i = 0; i < 10; i++) {
+            var gifDiv = $("<div>");
+
+            var rating = results[i].rating;
+
+            var p = $("<p>").text("Rating: " + rating);
+
+            var emotionGif = $("<img>");
+            emotionGif.attr("src", results[i].images.fixed_height.url);
+            gifDiv.append(emotionGif, p);
+
+            $("#gifs-appear-here").append(gifDiv);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
