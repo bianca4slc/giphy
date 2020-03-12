@@ -39,7 +39,6 @@
       $(".buttons").on("click", "button", function() {
         $("#gifs-appear-here").empty();
         var emotion = $(this).attr("data-emotion");
-        console.log(this);
         var queryURL =
           "https://api.giphy.com/v1/gifs/search?q=" +
           emotion +
